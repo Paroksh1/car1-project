@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Calendar, Fuel, Users, Check } from "lucide-react";
+import { Calendar, Fuel, Users, Check, ArrowRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Car } from "@/types/car";
@@ -31,8 +31,8 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => 
   };
 
   return (
-    <Card className="overflow-hidden group card-hover premium-card bg-card border rounded-xl">
-      <div className="block" onClick={handleCardClick}>
+    <Card className="overflow-hidden group card-float bg-card border rounded-xl shadow-md">
+      <div className="block cursor-pointer" onClick={handleCardClick}>
         <div className="relative h-48 overflow-hidden img-hover-zoom">
           <img
             src={car.images[0]}
@@ -49,13 +49,13 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => 
           
           <div className="absolute bottom-0 left-0 right-0 p-3 flex justify-between items-end z-10">
             <div className="flex flex-wrap gap-1.5">
-              <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1">
+              <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1 font-normal">
                 <Calendar className="w-3 h-3" /> {car.year}
               </Badge>
-              <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1">
+              <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1 font-normal">
                 <Fuel className="w-3 h-3" /> {car.fuel}
               </Badge>
-              <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1">
+              <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1 font-normal">
                 <Users className="w-3 h-3" /> {car.seating}
               </Badge>
             </div>
@@ -66,7 +66,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => 
           <div className="flex justify-between items-start mb-2">
             <HoverCard>
               <HoverCardTrigger asChild>
-                <h3 className="font-bold text-lg line-clamp-1 hover:text-primary transition-colors cursor-pointer">{car.brand} {car.model}</h3>
+                <h3 className="font-bold text-xl line-clamp-1 group-hover:text-primary transition-colors cursor-pointer">{car.brand} {car.model}</h3>
               </HoverCardTrigger>
               <HoverCardContent className="w-80 p-4">
                 <div className="space-y-2">
@@ -94,8 +94,9 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => 
           </p>
           
           <div className="mt-4">
-            <Button className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm button-shine">
+            <Button className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 group shadow-sm button-shine font-medium">
               View Details
+              <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
             </Button>
           </div>
         </div>

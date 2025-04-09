@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Calendar, Fuel, Users, Check } from "lucide-react";
+import { Calendar, Fuel, Users, Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Car } from "@/types/car";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +30,7 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange, onClic
 
   return (
     <div 
-      className="flex flex-col md:flex-row gap-5 p-5 border rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group bg-card relative overflow-hidden cursor-pointer premium-card"
+      className="flex flex-col md:flex-row gap-5 p-5 border rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group bg-card relative overflow-hidden cursor-pointer"
       onClick={handleItemClick}
     >
       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -50,10 +50,10 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange, onClic
         />
         
         <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
-          <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1">
+          <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1 font-normal">
             <Calendar className="w-3 h-3" /> {car.year}
           </Badge>
-          <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1">
+          <Badge variant="secondary" className="bg-black/50 text-white border-0 flex items-center gap-1 font-normal">
             <Fuel className="w-3 h-3" /> {car.fuel}
           </Badge>
         </div>
@@ -79,13 +79,13 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange, onClic
         </div>
         
         <div className="flex flex-wrap gap-2 mt-2">
-          <Badge variant="outline" className="flex items-center gap-1">
+          <Badge variant="outline" className="flex items-center gap-1 font-normal">
             <Fuel className="w-3.5 h-3.5" /> {car.fuel}
           </Badge>
-          <Badge variant="outline" className="flex items-center gap-1">
+          <Badge variant="outline" className="flex items-center gap-1 font-normal">
             <Users className="w-3.5 h-3.5" /> {car.seating} seats
           </Badge>
-          <Badge variant="outline">{car.color}</Badge>
+          <Badge variant="outline" className="font-normal">{car.color}</Badge>
         </div>
         
         <p className="text-sm mt-3 line-clamp-2 text-muted-foreground">
@@ -95,9 +95,10 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange, onClic
         <div className="mt-auto pt-4">
           <Button 
             variant="default" 
-            className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm button-shine"
+            className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm button-shine group font-medium"
           >
             View Details
+            <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
           </Button>
         </div>
       </div>
