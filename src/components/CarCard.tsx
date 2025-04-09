@@ -13,9 +13,10 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 interface CarCardProps {
   car: Car;
   onWishlistChange?: () => void;
+  onClick?: () => void;
 }
 
-const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange }) => {
+const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => {
   const { toast } = useToast();
   const [isInWishlist, setIsInWishlist] = React.useState(
     WishlistManager.isInWishlist(car.id)
@@ -54,9 +55,16 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange }) => {
     }).format(price);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
     <Card className="overflow-hidden group card-hover bg-card border rounded-xl">
-      <Link to={`/car/${car.id}`} className="block">
+      <div className="block" onClick={handleCardClick}>
         <div className="relative h-48 overflow-hidden">
           <img
             src={car.images[0]}
@@ -131,7 +139,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange }) => {
             </Button>
           </div>
         </div>
-      </Link>
+      </div>
     </Card>
   );
 };

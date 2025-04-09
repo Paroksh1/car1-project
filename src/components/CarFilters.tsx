@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { carsAPI } from "@/lib/car-data";
 import { CarFilters as CarFiltersType } from "@/types/car";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X, Filter } from "lucide-react";
+import { debounce } from "@/lib/utils";
 
 interface CarFiltersProps {
   filters: CarFiltersType;
@@ -24,14 +26,22 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
   const [maxPrice, setMaxPrice] = useState(100000);
   const [brands, setBrands] = useState<string[]>([]);
   const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+  const [seatingOptions, setSeatingOptions] = useState<number[]>([]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, maxPrice]);
   const [searchTerm, setSearchTerm] = useState(filters.search || "");
+  
+  const debouncedSearch = useRef(
+    debounce((value: string) => {
+      onFilterChange({ ...filters, search: value, page: 1 });
+    }, 500)
+  ).current;
 
   useEffect(() => {
     // Fetch filter options
     setBrands(carsAPI.getBrands());
     setFuelTypes(carsAPI.getFuelTypes());
+    setSeatingOptions([2, 4, 5, 7, 8]);
     
     const apiMaxPrice = carsAPI.getMaxPrice();
     setMaxPrice(apiMaxPrice);
@@ -40,6 +50,17 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
 
   const handlePriceChange = (value: number[]) => {
     setPriceRange([value[0], value[1]]);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    debouncedSearch(value);
+  };
+
+  const handleSeatingChange = (value: string) => {
+    const seating = value ? Number(value) : undefined;
+    onFilterChange({ ...filters, seating, page: 1 });
   };
 
   const applyFilters = () => {
@@ -64,7 +85,7 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
       minPrice: 0,
       maxPrice: maxPrice,
       seating: undefined,
-      sortBy: undefined,
+      sortBy: "default",
       page: 1,
       search: ""
     });
@@ -85,7 +106,7 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
           type="text"
           placeholder="Search by brand or model..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchChange}
           className="pl-10 pr-10"
         />
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
@@ -102,8 +123,8 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
 
       {/* Desktop filters - hidden on mobile */}
       <div className="hidden md:grid md:grid-cols-12 gap-4 items-end animate-fade-in">
-        <div className="col-span-6 space-y-2">
-          <Label htmlFor="price-range">Price Range: ${priceRange[0]} - ${priceRange[1]}</Label>
+        <div className="col-span-4 space-y-2">
+          <Label htmlFor="price-range">Price Range: ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}</Label>
           <Slider
             id="price-range"
             min={0}
@@ -156,6 +177,17 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
         </div>
         
         <div className="col-span-2">
+          <Label htmlFor="seating" className="mb-2 block">Seating</Label>
+          <ToggleGroup type="single" value={filters.seating?.toString()} onValueChange={handleSeatingChange} className="justify-start">
+            {seatingOptions.map(seats => (
+              <ToggleGroupItem key={seats} value={seats.toString()} aria-label={`${seats} seats`} className="h-8 w-8">
+                {seats}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+        
+        <div className="col-span-2">
           <Label htmlFor="sort">Sort By</Label>
           <Select
             value={filters.sortBy || "default"}
@@ -177,7 +209,9 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
       {mobileFiltersOpen && (
         <div className="md:hidden fixed inset-0 bg-background z-50 overflow-auto p-4 animate-fade-in">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Filters</h2>
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <Filter className="w-5 h-5" /> Filters
+            </h2>
             <Button variant="ghost" size="icon" onClick={toggleMobileFilters}>
               <X className="w-5 h-5" />
             </Button>
@@ -185,7 +219,7 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
           
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="mobile-price-range">Price Range: ${priceRange[0]} - ${priceRange[1]}</Label>
+              <Label htmlFor="mobile-price-range">Price Range: ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}</Label>
               <Slider
                 id="mobile-price-range"
                 min={0}
@@ -235,6 +269,22 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="mobile-seating" className="mb-2 block">Seating</Label>
+              <ToggleGroup 
+                type="single" 
+                value={filters.seating?.toString()} 
+                onValueChange={handleSeatingChange} 
+                className="flex flex-wrap gap-2"
+              >
+                {seatingOptions.map(seats => (
+                  <ToggleGroupItem key={seats} value={seats.toString()} aria-label={`${seats} seats`} className="h-9 w-10">
+                    {seats}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
             </div>
             
             <div className="space-y-2">

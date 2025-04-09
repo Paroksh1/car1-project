@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import CarCard from "@/components/CarCard";
 import CarListItem from "@/components/CarListItem";
 import ViewToggle from "@/components/ViewToggle";
 import EmptyState from "@/components/EmptyState";
+import CarDetailsModal from "@/components/CarDetailsModal";
 import { carsAPI } from "@/lib/car-data";
 import { WishlistManager } from "@/lib/wishlist";
 import { Car } from "@/types/car";
@@ -14,6 +16,7 @@ const Wishlist = () => {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<"grid" | "list">("grid");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
 
   useEffect(() => {
     fetchWishlistCars();
@@ -43,12 +46,23 @@ const Wishlist = () => {
   const handleWishlistChange = () => {
     // Force component to re-render by updating refresh key
     setRefreshKey(prevKey => prevKey + 1);
+    
+    // Dispatch custom event for other components
+    window.dispatchEvent(new Event('wishlistChange'));
   };
 
   const handleViewChange = (newView: "grid" | "list") => {
     setView(newView);
     // Save preference to localStorage
     localStorage.setItem("carView", newView);
+  };
+
+  const handleCardClick = (car: Car) => {
+    setSelectedCar(car);
+  };
+
+  const closeModal = () => {
+    setSelectedCar(null);
   };
 
   // Load view preference from localStorage
@@ -90,6 +104,7 @@ const Wishlist = () => {
                         key={car.id}
                         car={car}
                         onWishlistChange={handleWishlistChange}
+                        onClick={() => handleCardClick(car)}
                       />
                     ))}
                   </div>
@@ -100,6 +115,7 @@ const Wishlist = () => {
                         key={car.id}
                         car={car}
                         onWishlistChange={handleWishlistChange}
+                        onClick={() => handleCardClick(car)}
                       />
                     ))}
                   </div>
@@ -117,6 +133,16 @@ const Wishlist = () => {
           </>
         )}
       </div>
+
+      {/* Car Details Modal */}
+      {selectedCar && (
+        <CarDetailsModal 
+          car={selectedCar} 
+          isOpen={!!selectedCar} 
+          onClose={closeModal} 
+          onWishlistChange={handleWishlistChange} 
+        />
+      )}
     </Layout>
   );
 };

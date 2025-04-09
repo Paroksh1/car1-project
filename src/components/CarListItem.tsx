@@ -3,7 +3,6 @@ import React from "react";
 import { Heart, Calendar, Fuel, Users, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Car } from "@/types/car";
-import { Link } from "react-router-dom";
 import { WishlistManager } from "@/lib/wishlist";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
@@ -11,9 +10,10 @@ import { useToast } from "@/hooks/use-toast";
 interface CarListItemProps {
   car: Car;
   onWishlistChange?: () => void;
+  onClick?: () => void;
 }
 
-const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange }) => {
+const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange, onClick }) => {
   const { toast } = useToast();
   const [isInWishlist, setIsInWishlist] = React.useState(
     WishlistManager.isInWishlist(car.id)
@@ -52,10 +52,17 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange }) => {
     }).format(price);
   };
 
+  const handleItemClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
-    <Link 
-      to={`/car/${car.id}`}
-      className="flex flex-col md:flex-row gap-5 p-5 border rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group bg-card relative overflow-hidden"
+    <div 
+      className="flex flex-col md:flex-row gap-5 p-5 border rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group bg-card relative overflow-hidden cursor-pointer"
+      onClick={handleItemClick}
     >
       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
       
@@ -131,7 +138,7 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange }) => {
           </Button>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

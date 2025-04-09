@@ -7,7 +7,7 @@ export interface Car {
   price: number;
   mileage: number;
   fuel: string;
-  transmission: "Automatic" | "Manual";
+  transmission: "Automatic" | "Manual" | "CVT";
   color: string;
   seating: number;
   description: string;

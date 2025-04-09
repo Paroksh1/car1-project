@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import CarFilters from "@/components/CarFilters";
@@ -6,9 +7,11 @@ import CarListItem from "@/components/CarListItem";
 import ViewToggle from "@/components/ViewToggle";
 import Pagination from "@/components/Pagination";
 import EmptyState from "@/components/EmptyState";
+import CarDetailsModal from "@/components/CarDetailsModal";
 import { carsAPI } from "@/lib/car-data";
 import { Car, CarFilters as CarFiltersType } from "@/types/car";
 import { Search, Loader2, Car as CarIcon } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 const Index = () => {
   const [cars, setCars] = useState<Car[]>([]);
@@ -16,17 +19,41 @@ const Index = () => {
   const [totalCars, setTotalCars] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [view, setView] = useState<"grid" | "list">("grid");
-  const [refreshKey, setRefreshKey] = useState(0); // Used to force re-render when wishlist changes
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   
-  const [filters, setFilters] = useState<CarFiltersType>({
-    brand: "all",
-    fuel: "all",
-    minPrice: 0,
-    maxPrice: 100000,
-    page: 1,
-    limit: 10,
-    sortBy: "default"
+  // Initialize filters from URL params
+  const [filters, setFilters] = useState<CarFiltersType>(() => {
+    return {
+      brand: searchParams.get("brand") || "all",
+      fuel: searchParams.get("fuel") || "all",
+      minPrice: Number(searchParams.get("minPrice") || 0),
+      maxPrice: Number(searchParams.get("maxPrice") || 100000),
+      page: Number(searchParams.get("page") || 1),
+      limit: Number(searchParams.get("limit") || 10),
+      sortBy: (searchParams.get("sortBy") as CarFiltersType["sortBy"]) || "default",
+      search: searchParams.get("search") || "",
+      seating: searchParams.get("seating") ? Number(searchParams.get("seating")) : undefined
+    };
   });
+
+  // Update URL when filters change
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams();
+    
+    if (filters.brand && filters.brand !== "all") newSearchParams.set("brand", filters.brand);
+    if (filters.fuel && filters.fuel !== "all") newSearchParams.set("fuel", filters.fuel);
+    if (filters.minPrice && filters.minPrice > 0) newSearchParams.set("minPrice", filters.minPrice.toString());
+    if (filters.maxPrice && filters.maxPrice < 100000) newSearchParams.set("maxPrice", filters.maxPrice.toString());
+    if (filters.page && filters.page > 1) newSearchParams.set("page", filters.page.toString());
+    if (filters.limit && filters.limit !== 10) newSearchParams.set("limit", filters.limit.toString());
+    if (filters.sortBy && filters.sortBy !== "default") newSearchParams.set("sortBy", filters.sortBy);
+    if (filters.search) newSearchParams.set("search", filters.search);
+    if (filters.seating) newSearchParams.set("seating", filters.seating.toString());
+    
+    setSearchParams(newSearchParams);
+  }, [filters, setSearchParams]);
 
   useEffect(() => {
     fetchCars();
@@ -74,6 +101,14 @@ const Index = () => {
     setView(newView);
     // Save preference to localStorage
     localStorage.setItem("carView", newView);
+  };
+
+  const handleCardClick = (car: Car) => {
+    setSelectedCar(car);
+  };
+
+  const closeModal = () => {
+    setSelectedCar(null);
   };
 
   // Load view preference from localStorage
@@ -131,6 +166,7 @@ const Index = () => {
                             key={car.id}
                             car={car}
                             onWishlistChange={handleWishlistChange}
+                            onClick={() => handleCardClick(car)}
                           />
                         ))}
                       </div>
@@ -141,6 +177,7 @@ const Index = () => {
                             key={car.id}
                             car={car}
                             onWishlistChange={handleWishlistChange}
+                            onClick={() => handleCardClick(car)}
                           />
                         ))}
                       </div>
@@ -176,6 +213,11 @@ const Index = () => {
           )}
         </div>
       </div>
+
+      {/* Car Details Modal */}
+      {selectedCar && (
+        <CarDetailsModal car={selectedCar} isOpen={!!selectedCar} onClose={closeModal} onWishlistChange={handleWishlistChange} />
+      )}
     </Layout>
   );
 };
