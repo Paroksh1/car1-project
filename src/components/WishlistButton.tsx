@@ -56,6 +56,7 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
       toast({
         title: "Added to wishlist",
         description: `${car.brand} ${car.model} has been added to your wishlist.`,
+        variant: "default"
       });
     }
     

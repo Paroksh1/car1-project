@@ -30,16 +30,16 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange, onClic
 
   return (
     <div 
-      className="flex flex-col md:flex-row gap-5 p-5 border rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group bg-card relative overflow-hidden cursor-pointer"
+      className="flex flex-col md:flex-row gap-5 p-5 border rounded-xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group bg-card relative overflow-hidden cursor-pointer premium-card"
       onClick={handleItemClick}
     >
       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
       
-      <div className="relative md:w-64 h-48 overflow-hidden rounded-lg">
+      <div className="relative md:w-64 h-48 overflow-hidden rounded-lg img-hover-zoom">
         <img
           src={car.images[0]}
           alt={`${car.brand} ${car.model}`}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-40 group-hover:opacity-70 transition-opacity duration-300"></div>
         

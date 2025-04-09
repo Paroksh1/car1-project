@@ -31,13 +31,13 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => 
   };
 
   return (
-    <Card className="overflow-hidden group card-hover bg-card border rounded-xl">
+    <Card className="overflow-hidden group card-hover premium-card bg-card border rounded-xl">
       <div className="block" onClick={handleCardClick}>
-        <div className="relative h-48 overflow-hidden">
+        <div className="relative h-48 overflow-hidden img-hover-zoom">
           <img
             src={car.images[0]}
             alt={`${car.brand} ${car.model}`}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 group-hover:opacity-70 transition-opacity duration-300"></div>
           

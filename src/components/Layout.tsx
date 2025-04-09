@@ -121,7 +121,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             >
               <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-primary text-[10px] text-primary-foreground">
+                <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-primary text-[10px] text-primary-foreground badge-glow">
                   {wishlistCount}
                 </Badge>
               )}
@@ -147,7 +147,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             >
               <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
-                <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-primary text-[10px] text-primary-foreground">
+                <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-primary text-[10px] text-primary-foreground badge-glow">
                   {wishlistCount}
                 </Badge>
               )}

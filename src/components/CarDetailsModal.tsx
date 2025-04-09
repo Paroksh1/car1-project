@@ -27,7 +27,7 @@ const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsM
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 premium-card animate-fade-in">
         <DialogHeader className="p-6 pb-0">
           <div className="flex items-start justify-between">
             <div>
@@ -56,7 +56,7 @@ const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsM
         <div className="p-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+              <div className="aspect-video bg-muted rounded-lg overflow-hidden img-hover-zoom">
                 <img
                   src={selectedImage}
                   alt={`${car.brand} ${car.model}`}
@@ -72,7 +72,7 @@ const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsM
                       className={`flex-shrink-0 h-16 w-24 rounded-md overflow-hidden border-2 transition-all ${
                         selectedImage === image
                           ? "border-primary"
-                          : "border-transparent"
+                          : "border-transparent hover:border-primary/30"
                       }`}
                       onClick={() => setSelectedImage(image)}
                     >
@@ -93,7 +93,7 @@ const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsM
                   <h3 className="text-xl font-bold">{car.brand} {car.model}</h3>
                   <p className="text-muted-foreground">{car.year} • {car.transmission}</p>
                 </div>
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold text-primary bg-primary/5 px-4 py-2 rounded-xl">
                   {formatPrice(car.price)}
                 </div>
               </div>
@@ -134,7 +134,7 @@ const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsM
               
               <div>
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <Info className="w-4 h-4" /> Description
+                  <Info className="w-4 h-4 text-primary" /> Description
                 </h4>
                 <p className="text-muted-foreground text-sm">{car.description}</p>
               </div>
@@ -142,7 +142,7 @@ const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsM
               {car.features && car.features.length > 0 && (
                 <div>
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
-                    <Star className="w-4 h-4" /> Features
+                    <Star className="w-4 h-4 text-primary" /> Features
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {car.features.map((feature, index) => (

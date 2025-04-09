@@ -14,10 +14,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 217 91% 60%;
+    --primary: 222 75% 33%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 215 16% 47%;
+    --secondary: 217 91% 60%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96%;
@@ -91,7 +91,7 @@
   }
   
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
   
