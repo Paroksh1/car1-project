@@ -158,14 +158,14 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
         <div className="col-span-2">
           <Label htmlFor="sort">Sort By</Label>
           <Select
-            value={filters.sortBy || ""}
+            value={filters.sortBy || "default"}
             onValueChange={(value: any) => onFilterChange({ ...filters, sortBy: value, page: 1 })}
           >
             <SelectTrigger id="sort">
               <SelectValue placeholder="Sort By" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Default</SelectItem>
+              <SelectItem value="default">Default</SelectItem>
               <SelectItem value="price-asc">Price: Low to High</SelectItem>
               <SelectItem value="price-desc">Price: High to Low</SelectItem>
             </SelectContent>
@@ -240,14 +240,14 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
             <div className="space-y-2">
               <Label htmlFor="mobile-sort">Sort By</Label>
               <Select
-                value={filters.sortBy || ""}
+                value={filters.sortBy || "default"}
                 onValueChange={(value: any) => onFilterChange({ ...filters, sortBy: value, page: 1 })}
               >
                 <SelectTrigger id="mobile-sort">
                   <SelectValue placeholder="Sort By" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Default</SelectItem>
+                  <SelectItem value="default">Default</SelectItem>
                   <SelectItem value="price-asc">Price: Low to High</SelectItem>
                   <SelectItem value="price-desc">Price: High to Low</SelectItem>
                 </SelectContent>

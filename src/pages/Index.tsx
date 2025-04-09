@@ -25,7 +25,8 @@ const Index = () => {
     minPrice: 0,
     maxPrice: 100000,
     page: 1,
-    limit: 10
+    limit: 10,
+    sortBy: "default"
   });
 
   useEffect(() => {
@@ -142,7 +143,8 @@ const Index = () => {
                   minPrice: 0,
                   maxPrice: 100000,
                   page: 1,
-                  search: ""
+                  search: "",
+                  sortBy: "default"
                 })}
               />
             )}
