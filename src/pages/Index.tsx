@@ -9,7 +9,7 @@ import Pagination from "@/components/Pagination";
 import EmptyState from "@/components/EmptyState";
 import { carsAPI } from "@/lib/car-data";
 import { Car, CarFilters as CarFiltersType } from "@/types/car";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, Car as CarIcon } from "lucide-react";
 
 const Index = () => {
   const [cars, setCars] = useState<Car[]>([]);
@@ -56,6 +56,8 @@ const Index = () => {
 
   const handlePageChange = (page: number) => {
     setFilters({ ...filters, page });
+    // Scroll to top when changing page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleWishlistChange = () => {
@@ -79,83 +81,95 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Find Your Perfect Car</h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Browse our extensive collection of quality vehicles and find your dream car today
-          </p>
-        </div>
-        
-        <div className="bg-muted/50 p-6 rounded-xl mb-10 shadow-sm">
-          <CarFilters filters={filters} onFilterChange={handleFilterChange} />
-        </div>
-        
-        {loading ? (
-          <div className="flex flex-col justify-center items-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
-            <span className="text-lg">Loading your dream cars...</span>
+      <div className="relative overflow-hidden">
+        {/* Hero section with background */}
+        <div className="bg-gradient-to-r from-primary/10 to-accent/10 py-16 px-4">
+          <div className="container mx-auto text-center relative z-10">
+            <div className="inline-block p-2 bg-primary/10 rounded-xl mb-4">
+              <CarIcon size={32} className="text-primary" />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 text-gradient">Find Your Perfect Car</h1>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Browse our extensive collection of quality vehicles and find your dream car today
+            </p>
           </div>
-        ) : (
-          <>
-            {cars.length > 0 ? (
-              <>
-                <div className="flex justify-between items-center mb-8">
-                  <p className="text-sm text-muted-foreground">
-                    Showing {cars.length} of {totalCars} cars
-                  </p>
-                  <ViewToggle view={view} onChange={handleViewChange} />
-                </div>
-                
-                {view === "grid" ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {cars.map((car) => (
-                      <CarCard
-                        key={car.id}
-                        car={car}
-                        onWishlistChange={handleWishlistChange}
-                      />
-                    ))}
+        </div>
+        
+        <div className="container mx-auto px-4 -mt-10 relative z-20">
+          <div className="bg-card rounded-xl shadow-lg p-6 border mb-10">
+            <CarFilters filters={filters} onFilterChange={handleFilterChange} />
+          </div>
+          
+          {loading ? (
+            <div className="flex flex-col justify-center items-center py-20">
+              <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+              <span className="text-lg">Loading your dream cars...</span>
+            </div>
+          ) : (
+            <>
+              {cars.length > 0 ? (
+                <>
+                  <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                    <div className="flex items-center gap-2 bg-muted/30 px-4 py-2 rounded-lg">
+                      <p className="text-sm text-muted-foreground">
+                        Showing <span className="font-medium text-foreground">{cars.length}</span> of <span className="font-medium text-foreground">{totalCars}</span> cars
+                      </p>
+                    </div>
+                    <ViewToggle view={view} onChange={handleViewChange} />
                   </div>
-                ) : (
-                  <div className="flex flex-col gap-6">
-                    {cars.map((car) => (
-                      <CarListItem
-                        key={car.id}
-                        car={car}
-                        onWishlistChange={handleWishlistChange}
-                      />
-                    ))}
+                  
+                  <div className="animate-fade-in">
+                    {view === "grid" ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {cars.map((car) => (
+                          <CarCard
+                            key={car.id}
+                            car={car}
+                            onWishlistChange={handleWishlistChange}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-6">
+                        {cars.map((car) => (
+                          <CarListItem
+                            key={car.id}
+                            car={car}
+                            onWishlistChange={handleWishlistChange}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
-                )}
-                
-                <div className="mt-10">
-                  <Pagination
-                    currentPage={filters.page || 1}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                </div>
-              </>
-            ) : (
-              <EmptyState
-                icon={<Search className="w-full h-full" />}
-                title="No cars found"
-                description="Try changing your search filters to find what you're looking for."
-                actionLabel="Reset Filters"
-                onAction={() => handleFilterChange({
-                  brand: "all",
-                  fuel: "all",
-                  minPrice: 0,
-                  maxPrice: 100000,
-                  page: 1,
-                  search: "",
-                  sortBy: "default"
-                })}
-              />
-            )}
-          </>
-        )}
+                  
+                  <div className="mt-10">
+                    <Pagination
+                      currentPage={filters.page || 1}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
+                </>
+              ) : (
+                <EmptyState
+                  icon={<Search className="w-full h-full" />}
+                  title="No cars found"
+                  description="Try changing your search filters to find what you're looking for."
+                  actionLabel="Reset Filters"
+                  onAction={() => handleFilterChange({
+                    brand: "all",
+                    fuel: "all",
+                    minPrice: 0,
+                    maxPrice: 100000,
+                    page: 1,
+                    search: "",
+                    sortBy: "default"
+                  })}
+                />
+              )}
+            </>
+          )}
+        </div>
       </div>
     </Layout>
   );

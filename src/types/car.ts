@@ -1,28 +1,27 @@
 
 export interface Car {
-  id: number;
+  id: string;
   brand: string;
   model: string;
   year: number;
   price: number;
-  fuel: string;
-  seating: number;
   mileage: number;
-  transmission: string;
+  fuel: string;
+  transmission: "Automatic" | "Manual";
   color: string;
-  images: string[];
+  seating: number;
   description: string;
-  features: string[];
+  images: string[];
 }
 
-export type CarFilters = {
+export interface CarFilters {
   brand?: string;
   minPrice?: number;
   maxPrice?: number;
   fuel?: string;
   seating?: number;
-  sortBy?: 'default' | 'price-asc' | 'price-desc';
+  sortBy?: "default" | "price-asc" | "price-desc";
   page?: number;
   limit?: number;
   search?: string;
-};
+}

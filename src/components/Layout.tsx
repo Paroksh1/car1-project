@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Car, Search, Heart, Settings, Sun, Moon } from "lucide-react";
+import { Car, Search, Heart, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -46,23 +46,46 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-subtle">
       {/* Header */}
-      <header className="border-b sticky top-0 bg-background z-10">
-        <div className="container mx-auto flex justify-between items-center py-4">
-          <Link to="/" className="flex items-center gap-2 text-2xl font-semibold text-primary">
-            <Car size={28} strokeWidth={2} />
-            <span>CarSeekerHub</span>
+      <header className="border-b sticky top-0 bg-background/80 backdrop-blur-sm z-10 shadow-sm">
+        <div className="container mx-auto flex justify-between items-center py-4 px-4 md:px-8">
+          <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
+            <div className="bg-primary text-primary-foreground p-2 rounded-lg">
+              <Car size={24} strokeWidth={2} />
+            </div>
+            <span className="text-gradient hidden sm:inline">CarSeekerHub</span>
+            <span className="sm:hidden text-gradient">CSH</span>
           </Link>
           
-          <div className="flex items-center gap-4">
-            <Link to="/" className={location.pathname === "/" ? "text-primary" : "text-muted-foreground hover:text-primary transition-colors"}>
+          <div className="flex items-center gap-3">
+            <Link 
+              to="/" 
+              className={`p-2 rounded-full transition-colors ${
+                location.pathname === "/" 
+                  ? "bg-primary/10 text-primary" 
+                  : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+              }`}
+            >
               <Search className="w-5 h-5" />
             </Link>
-            <Link to="/wishlist" className={location.pathname === "/wishlist" ? "text-primary" : "text-muted-foreground hover:text-primary transition-colors"}>
+            <Link 
+              to="/wishlist" 
+              className={`p-2 rounded-full transition-colors ${
+                location.pathname === "/wishlist" 
+                  ? "bg-primary/10 text-primary" 
+                  : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+              }`}
+            >
               <Heart className="w-5 h-5" />
             </Link>
-            <Button variant="ghost" size="icon" onClick={toggleDarkMode} title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleDarkMode} 
+              title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              className="rounded-full"
+            >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </Button>
           </div>
@@ -75,12 +98,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </main>
       
       {/* Footer */}
-      <footer className="border-t py-6 mt-8">
-        <div className="container mx-auto text-center text-muted-foreground">
-          <p>© 2025 CarSeekerHub. All rights reserved.</p>
-          <div className="flex justify-center gap-4 mt-2">
-            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-            <Link to="/wishlist" className="hover:text-primary transition-colors">Wishlist</Link>
+      <footer className="border-t py-8 bg-muted/30 mt-8">
+        <div className="container mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+              <div className="bg-primary text-primary-foreground p-1.5 rounded-lg">
+                <Car size={18} strokeWidth={2} />
+              </div>
+              <span className="font-semibold text-lg">CarSeekerHub</span>
+            </div>
+            
+            <p className="text-muted-foreground text-sm">© 2025 CarSeekerHub. All rights reserved.</p>
+            
+            <div className="flex gap-6">
+              <Link to="/" className="text-sm hover:text-primary transition-colors">Home</Link>
+              <Link to="/wishlist" className="text-sm hover:text-primary transition-colors">Wishlist</Link>
+            </div>
           </div>
         </div>
       </footer>

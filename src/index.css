@@ -49,7 +49,7 @@
     --background: 222 47% 11%;
     --foreground: 210 40% 98%;
 
-    --card: 222 47% 11%;
+    --card: 223 47% 14%;
     --card-foreground: 210 40% 98%;
 
     --popover: 222 47% 11%;
@@ -112,11 +112,11 @@
 /* Custom animations */
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent;
   }
   
   .bg-gradient-subtle {
-    @apply bg-gradient-to-tr from-background to-muted;
+    @apply bg-gradient-to-b from-background to-muted/60;
   }
   
   .animate-hover {
@@ -133,5 +133,90 @@
   
   .card-zoom-effect:hover img {
     @apply scale-110;
+  }
+  
+  /* Button shine effect */
+  .button-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .button-shine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to right, 
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: transform 0.5s;
+    opacity: 0;
+  }
+  
+  .button-shine:hover::after {
+    transform: rotate(30deg) translate(150%, 150%);
+    opacity: 1;
+  }
+  
+  /* Badge glow effect */
+  .badge-glow {
+    animation: badge-pulse 2s infinite;
+  }
+  
+  @keyframes badge-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(var(--primary), 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 5px rgba(var(--primary), 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(var(--primary), 0);
+    }
+  }
+  
+  /* Fade-in animation */
+  .fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Card float animation */
+  .card-float {
+    transition: transform 0.3s ease;
+  }
+  
+  .card-float:hover {
+    transform: translateY(-8px);
+  }
+  
+  /* Pulse animation */
+  .pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 }
