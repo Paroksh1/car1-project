@@ -18,8 +18,8 @@ import { Search, SlidersHorizontal, X, Filter } from "lucide-react";
 import { debounce } from "@/lib/utils";
 
 interface CarFiltersProps {
-  filters: CarFiltersType;
-  onFilterChange: (filters: CarFiltersType) => void;
+  filters: CarFiltersType & { sortOrder?: "default" | "price-asc" | "price-desc" };
+  onFilterChange: (filters: Partial<CarFiltersType & { sortOrder?: "default" | "price-asc" | "price-desc" }>) => void;
 }
 
 const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
@@ -85,7 +85,7 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
       minPrice: 0,
       maxPrice: maxPrice,
       seating: undefined,
-      sortBy: "default",
+      sortOrder: "default",
       page: 1,
       search: ""
     });
@@ -190,8 +190,8 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
         <div className="col-span-2">
           <Label htmlFor="sort">Sort By</Label>
           <Select
-            value={filters.sortBy || "default"}
-            onValueChange={(value: any) => onFilterChange({ ...filters, sortBy: value, page: 1 })}
+            value={filters.sortOrder || "default"}
+            onValueChange={(value: "default" | "price-asc" | "price-desc") => onFilterChange({ ...filters, sortOrder: value, page: 1 })}
           >
             <SelectTrigger id="sort">
               <SelectValue placeholder="Sort By" />
@@ -290,8 +290,8 @@ const CarFilters: React.FC<CarFiltersProps> = ({ filters, onFilterChange }) => {
             <div className="space-y-2">
               <Label htmlFor="mobile-sort">Sort By</Label>
               <Select
-                value={filters.sortBy || "default"}
-                onValueChange={(value: any) => onFilterChange({ ...filters, sortBy: value, page: 1 })}
+                value={filters.sortOrder || "default"}
+                onValueChange={(value: "default" | "price-asc" | "price-desc") => onFilterChange({ ...filters, sortOrder: value, page: 1 })}
               >
                 <SelectTrigger id="mobile-sort">
                   <SelectValue placeholder="Sort By" />

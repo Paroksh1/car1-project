@@ -1,14 +1,12 @@
 
 import React from "react";
-import { Heart, Calendar, Fuel, Users, Check } from "lucide-react";
+import { Calendar, Fuel, Users, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Car } from "@/types/car";
-import { Link } from "react-router-dom";
-import { WishlistManager } from "@/lib/wishlist";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import WishlistButton from "./WishlistButton";
 
 interface CarCardProps {
   car: Car;
@@ -17,36 +15,6 @@ interface CarCardProps {
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => {
-  const { toast } = useToast();
-  const [isInWishlist, setIsInWishlist] = React.useState(
-    WishlistManager.isInWishlist(car.id)
-  );
-
-  const toggleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (isInWishlist) {
-      WishlistManager.removeFromWishlist(car.id);
-      setIsInWishlist(false);
-      toast({
-        title: "Removed from wishlist",
-        description: `${car.brand} ${car.model} has been removed from your wishlist.`,
-      });
-    } else {
-      WishlistManager.addToWishlist(car.id);
-      setIsInWishlist(true);
-      toast({
-        title: "Added to wishlist",
-        description: `${car.brand} ${car.model} has been added to your wishlist.`,
-      });
-    }
-    
-    if (onWishlistChange) {
-      onWishlistChange();
-    }
-  };
-
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -73,19 +41,11 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 group-hover:opacity-70 transition-opacity duration-300"></div>
           
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`absolute top-3 right-3 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white ${
-              isInWishlist ? "text-red-500" : "text-muted-foreground"
-            } shadow-md z-10`}
-            onClick={toggleWishlist}
-            aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
-          >
-            <Heart
-              className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`}
-            />
-          </Button>
+          <WishlistButton 
+            car={car} 
+            onWishlistChange={onWishlistChange} 
+            className="absolute top-3 right-3 z-10"
+          />
           
           <div className="absolute bottom-0 left-0 right-0 p-3 flex justify-between items-end z-10">
             <div className="flex flex-wrap gap-1.5">
@@ -134,7 +94,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onWishlistChange, onClick }) => 
           </p>
           
           <div className="mt-4">
-            <Button className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm">
+            <Button className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm button-shine">
               View Details
             </Button>
           </div>

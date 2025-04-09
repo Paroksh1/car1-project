@@ -24,7 +24,9 @@ const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   
   // Initialize filters from URL params
-  const [filters, setFilters] = useState<CarFiltersType>(() => {
+  const [filters, setFilters] = useState<CarFiltersType & {sortOrder?: "default" | "price-asc" | "price-desc"}>(() => {
+    const sortBy = searchParams.get("sortBy") as CarFiltersType["sortBy"] | "default" | null;
+    
     return {
       brand: searchParams.get("brand") || "all",
       fuel: searchParams.get("fuel") || "all",
@@ -32,7 +34,7 @@ const Index = () => {
       maxPrice: Number(searchParams.get("maxPrice") || 100000),
       page: Number(searchParams.get("page") || 1),
       limit: Number(searchParams.get("limit") || 10),
-      sortBy: (searchParams.get("sortBy") as CarFiltersType["sortBy"]) || "default",
+      sortOrder: sortBy || "default", // Use sortOrder for UI state
       search: searchParams.get("search") || "",
       seating: searchParams.get("seating") ? Number(searchParams.get("seating")) : undefined
     };
@@ -48,7 +50,7 @@ const Index = () => {
     if (filters.maxPrice && filters.maxPrice < 100000) newSearchParams.set("maxPrice", filters.maxPrice.toString());
     if (filters.page && filters.page > 1) newSearchParams.set("page", filters.page.toString());
     if (filters.limit && filters.limit !== 10) newSearchParams.set("limit", filters.limit.toString());
-    if (filters.sortBy && filters.sortBy !== "default") newSearchParams.set("sortBy", filters.sortBy);
+    if (filters.sortOrder && filters.sortOrder !== "default") newSearchParams.set("sortBy", filters.sortOrder);
     if (filters.search) newSearchParams.set("search", filters.search);
     if (filters.seating) newSearchParams.set("seating", filters.seating.toString());
     
@@ -63,10 +65,22 @@ const Index = () => {
     setLoading(true);
     
     try {
-      // Filter out 'default' sort option when passing to API
-      const apiFilters = {...filters};
-      if (apiFilters.sortBy === 'default') {
-        delete apiFilters.sortBy;
+      // Create API filter object
+      const apiFilters: CarFiltersType = {};
+      
+      // Only add properties that exist in CarFiltersType
+      if (filters.brand && filters.brand !== "all") apiFilters.brand = filters.brand;
+      if (filters.fuel && filters.fuel !== "all") apiFilters.fuel = filters.fuel;
+      if (filters.minPrice !== undefined) apiFilters.minPrice = filters.minPrice;
+      if (filters.maxPrice !== undefined) apiFilters.maxPrice = filters.maxPrice;
+      if (filters.page) apiFilters.page = filters.page;
+      if (filters.limit) apiFilters.limit = filters.limit;
+      if (filters.search) apiFilters.search = filters.search;
+      if (filters.seating) apiFilters.seating = filters.seating;
+      
+      // Only set sortBy if it's not default
+      if (filters.sortOrder && filters.sortOrder !== "default") {
+        apiFilters.sortBy = filters.sortOrder;
       }
       
       // Fetch cars with current filters
@@ -82,7 +96,7 @@ const Index = () => {
     }
   };
 
-  const handleFilterChange = (newFilters: CarFiltersType) => {
+  const handleFilterChange = (newFilters: Partial<CarFiltersType & {sortOrder?: "default" | "price-asc" | "price-desc"}>) => {
     setFilters({ ...filters, ...newFilters });
   };
 
@@ -205,7 +219,7 @@ const Index = () => {
                     maxPrice: 100000,
                     page: 1,
                     search: "",
-                    sortBy: "default"
+                    sortOrder: "default"
                   })}
                 />
               )}

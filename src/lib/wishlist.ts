@@ -19,6 +19,9 @@ export const WishlistManager = {
       if (!wishlist.includes(carId)) {
         wishlist.push(carId);
         localStorage.setItem('car-wishlist', JSON.stringify(wishlist));
+        
+        // Dispatch event to update other components
+        window.dispatchEvent(new Event('wishlistChange'));
       }
     } catch (error) {
       console.error("Error adding to wishlist:", error);
@@ -35,6 +38,9 @@ export const WishlistManager = {
       const wishlist = WishlistManager.getWishlist();
       const updatedWishlist = wishlist.filter(id => id !== carId);
       localStorage.setItem('car-wishlist', JSON.stringify(updatedWishlist));
+      
+      // Dispatch event to update other components
+      window.dispatchEvent(new Event('wishlistChange'));
     } catch (error) {
       console.error("Error removing from wishlist:", error);
       toast({
@@ -77,8 +83,28 @@ export const WishlistManager = {
   clearWishlist: (): void => {
     try {
       localStorage.setItem('car-wishlist', JSON.stringify([]));
+      
+      // Dispatch event to update other components
+      window.dispatchEvent(new Event('wishlistChange'));
     } catch (error) {
       console.error("Error clearing wishlist:", error);
+    }
+  },
+  
+  toggleWishlist: (carId: number): boolean => {
+    try {
+      const isInWishlist = WishlistManager.isInWishlist(carId);
+      
+      if (isInWishlist) {
+        WishlistManager.removeFromWishlist(carId);
+        return false;
+      } else {
+        WishlistManager.addToWishlist(carId);
+        return true;
+      }
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
+      return WishlistManager.isInWishlist(carId);
     }
   }
 };

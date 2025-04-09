@@ -21,7 +21,7 @@ export interface CarFilters {
   maxPrice?: number;
   fuel?: string;
   seating?: number;
-  sortBy?: "default" | "price-asc" | "price-desc";
+  sortBy?: "price-asc" | "price-desc";
   page?: number;
   limit?: number;
   search?: string;

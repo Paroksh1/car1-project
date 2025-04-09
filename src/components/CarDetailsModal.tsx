@@ -2,11 +2,10 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Heart, X, Star, Image as ImageIcon, Info, Shield, Calendar, Gauge, Fuel } from "lucide-react";
+import { X, Star, Image as ImageIcon, Info, Shield, Calendar, Gauge, Fuel } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Car } from "@/types/car";
-import { WishlistManager } from "@/lib/wishlist";
-import { useToast } from "@/hooks/use-toast";
+import WishlistButton from "./WishlistButton";
 
 interface CarDetailsModalProps {
   car: Car;
@@ -16,36 +15,7 @@ interface CarDetailsModalProps {
 }
 
 const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsModalProps) => {
-  const { toast } = useToast();
   const [selectedImage, setSelectedImage] = useState(car.images[0]);
-  const [isInWishlist, setIsInWishlist] = useState(
-    WishlistManager.isInWishlist(car.id)
-  );
-
-  const toggleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (isInWishlist) {
-      WishlistManager.removeFromWishlist(car.id);
-      setIsInWishlist(false);
-      toast({
-        title: "Removed from wishlist",
-        description: `${car.brand} ${car.model} has been removed from your wishlist.`,
-      });
-    } else {
-      WishlistManager.addToWishlist(car.id);
-      setIsInWishlist(true);
-      toast({
-        title: "Added to wishlist",
-        description: `${car.brand} ${car.model} has been added to your wishlist.`,
-      });
-    }
-    
-    if (onWishlistChange) {
-      onWishlistChange();
-    }
-  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -67,16 +37,10 @@ const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsM
               </DialogDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className={`rounded-full ${
-                  isInWishlist ? "text-red-500" : "text-muted-foreground"
-                }`}
-                onClick={toggleWishlist}
-              >
-                <Heart className={`w-5 h-5 ${isInWishlist ? "fill-current" : ""}`} />
-              </Button>
+              <WishlistButton 
+                car={car} 
+                onWishlistChange={onWishlistChange} 
+              />
               <Button
                 variant="ghost"
                 size="icon"
@@ -190,10 +154,16 @@ const CarDetailsModal = ({ car, isOpen, onClose, onWishlistChange }: CarDetailsM
                 </div>
               )}
               
-              <div className="pt-4">
-                <Button className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm">
+              <div className="pt-4 flex gap-3">
+                <Button className="flex-1 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-sm button-shine">
                   Contact Seller
                 </Button>
+                <WishlistButton 
+                  car={car} 
+                  variant="button" 
+                  onWishlistChange={onWishlistChange} 
+                  className="flex-1"
+                />
               </div>
             </div>
           </div>

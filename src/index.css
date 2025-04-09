@@ -182,7 +182,7 @@
   }
   
   /* Fade-in animation */
-  .fade-in {
+  .animate-fade-in {
     animation: fade-in 0.5s ease-out forwards;
   }
   
@@ -218,5 +218,67 @@
     50% {
       opacity: 0.5;
     }
+  }
+
+  /* Glass card effect */
+  .glass-card {
+    @apply backdrop-blur-sm bg-white/10 border border-white/20;
+  }
+
+  .dark .glass-card {
+    @apply bg-black/20 border-white/10;
+  }
+
+  /* Premium card effect */
+  .premium-card {
+    @apply relative overflow-hidden;
+  }
+
+  .premium-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, theme('colors.primary.DEFAULT'), theme('colors.accent.DEFAULT'));
+  }
+  
+  /* Hero Section Animations */
+  .hero-animate-1 {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .hero-animate-2 {
+    animation: float 8s ease-in-out infinite 1s;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+  }
+
+  /* Image Hover Effects */
+  .img-hover-zoom {
+    @apply overflow-hidden;
+  }
+
+  .img-hover-zoom img {
+    @apply transition-transform duration-500 ease-in-out;
+  }
+
+  .img-hover-zoom:hover img {
+    @apply scale-110;
+  }
+
+  /* 3D Button Effect */
+  .btn-3d {
+    @apply relative transform transition-transform active:translate-y-1;
+    box-shadow: 0 4px 0 theme('colors.primary.DEFAULT')/80;
+  }
+
+  .btn-3d:active {
+    box-shadow: 0 0 0 theme('colors.primary.DEFAULT')/80;
   }
 }
