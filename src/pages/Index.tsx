@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import CarFilters from "@/components/CarFilters";
@@ -37,8 +36,14 @@ const Index = () => {
     setLoading(true);
     
     try {
+      // Filter out 'default' sort option when passing to API
+      const apiFilters = {...filters};
+      if (apiFilters.sortBy === 'default') {
+        delete apiFilters.sortBy;
+      }
+      
       // Fetch cars with current filters
-      const response = carsAPI.getCars(filters);
+      const response = carsAPI.getCars(apiFilters);
       
       setCars(response.cars);
       setTotalCars(response.total);

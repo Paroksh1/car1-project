@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -126,7 +125,6 @@ const CarDetail = () => {
         </Button>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Images section */}
           <div className="space-y-4">
             <div className="aspect-video bg-muted rounded-lg overflow-hidden">
               <img
@@ -136,7 +134,6 @@ const CarDetail = () => {
               />
             </div>
             
-            {/* Thumbnails */}
             {car.images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto hide-scrollbar py-2">
                 {car.images.map((image, index) => (
@@ -160,7 +157,6 @@ const CarDetail = () => {
             )}
           </div>
           
-          {/* Details section */}
           <div>
             <div className="flex justify-between items-start">
               <div>

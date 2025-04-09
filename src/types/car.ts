@@ -1,6 +1,6 @@
 
 export interface Car {
-  id: string;
+  id: number;
   brand: string;
   model: string;
   year: number;
@@ -12,6 +12,7 @@ export interface Car {
   seating: number;
   description: string;
   images: string[];
+  features: string[];
 }
 
 export interface CarFilters {
