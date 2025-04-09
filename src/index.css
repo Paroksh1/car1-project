@@ -33,7 +33,7 @@
     --input: 214 32% 91%;
     --ring: 221 83% 53%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 220 14% 96%;
     --sidebar-foreground: 222 47% 11%;
@@ -92,6 +92,7 @@
   
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
   
   .card-hover {
@@ -105,5 +106,32 @@
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+}
+
+/* Custom animations */
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+  
+  .bg-gradient-subtle {
+    @apply bg-gradient-to-tr from-background to-muted;
+  }
+  
+  .animate-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .card-zoom-effect {
+    @apply overflow-hidden;
+  }
+  
+  .card-zoom-effect img {
+    @apply transition-transform duration-500;
+  }
+  
+  .card-zoom-effect:hover img {
+    @apply scale-110;
   }
 }

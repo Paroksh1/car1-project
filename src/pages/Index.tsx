@@ -80,23 +80,27 @@ const Index = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-2">Find Your Perfect Car</h1>
-        <p className="text-muted-foreground mb-8">
-          Browse our extensive collection of quality vehicles
-        </p>
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Find Your Perfect Car</h1>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Browse our extensive collection of quality vehicles and find your dream car today
+          </p>
+        </div>
         
-        <CarFilters filters={filters} onFilterChange={handleFilterChange} />
+        <div className="bg-muted/50 p-6 rounded-xl mb-10 shadow-sm">
+          <CarFilters filters={filters} onFilterChange={handleFilterChange} />
+        </div>
         
         {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <span className="ml-2 text-lg">Loading cars...</span>
+          <div className="flex flex-col justify-center items-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+            <span className="text-lg">Loading your dream cars...</span>
           </div>
         ) : (
           <>
             {cars.length > 0 ? (
               <>
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center mb-8">
                   <p className="text-sm text-muted-foreground">
                     Showing {cars.length} of {totalCars} cars
                   </p>
@@ -114,7 +118,7 @@ const Index = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-6">
                     {cars.map((car) => (
                       <CarListItem
                         key={car.id}
@@ -125,11 +129,13 @@ const Index = () => {
                   </div>
                 )}
                 
-                <Pagination
-                  currentPage={filters.page || 1}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                />
+                <div className="mt-10">
+                  <Pagination
+                    currentPage={filters.page || 1}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
               </>
             ) : (
               <EmptyState

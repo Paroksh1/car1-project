@@ -55,20 +55,21 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange }) => {
   return (
     <Link 
       to={`/car/${car.id}`}
-      className="flex flex-col md:flex-row gap-4 p-4 border rounded-lg hover:shadow-md transition-all card-hover"
+      className="flex flex-col md:flex-row gap-5 p-5 border rounded-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group bg-card"
     >
-      <div className="relative md:w-48 h-40 overflow-hidden rounded-md">
+      <div className="relative md:w-64 h-48 overflow-hidden rounded-md">
         <img
           src={car.images[0]}
           alt={`${car.brand} ${car.model}`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <Button
           variant="ghost"
           size="icon"
-          className={`absolute top-2 right-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white ${
+          className={`absolute top-3 right-3 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white ${
             isInWishlist ? "text-red-500" : "text-muted-foreground"
-          }`}
+          } shadow-md`}
           onClick={toggleWishlist}
           aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
         >
@@ -77,16 +78,16 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange }) => {
       </div>
       
       <div className="flex-1 flex flex-col">
-        <div className="flex justify-between items-start mb-2">
+        <div className="flex justify-between items-start mb-3">
           <div>
-            <h3 className="font-bold text-lg">
+            <h3 className="font-bold text-xl">
               {car.brand} {car.model}
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mt-1">
               {car.year} · {car.transmission} · {car.mileage.toLocaleString()} miles
             </p>
           </div>
-          <p className="font-semibold text-lg">{formatPrice(car.price)}</p>
+          <p className="font-semibold text-xl text-primary">{formatPrice(car.price)}</p>
         </div>
         
         <div className="flex flex-wrap gap-2 mt-2">
@@ -95,12 +96,12 @@ const CarListItem: React.FC<CarListItemProps> = ({ car, onWishlistChange }) => {
           <Badge variant="outline">{car.color}</Badge>
         </div>
         
-        <p className="text-sm mt-2 line-clamp-2 text-muted-foreground">
+        <p className="text-sm mt-3 line-clamp-2 text-muted-foreground">
           {car.description}
         </p>
         
         <div className="mt-auto pt-4">
-          <Button variant="outline" className="w-full sm:w-auto">View Details</Button>
+          <Button variant="default" className="w-full sm:w-auto">View Details</Button>
         </div>
       </div>
     </Link>
